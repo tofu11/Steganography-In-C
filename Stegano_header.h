@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "Encode.c"
-#include "Decode.c"
+
 
 //reading size of image file
 int size_of_image(FILE *fp1);
