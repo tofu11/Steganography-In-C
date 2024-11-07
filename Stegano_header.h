@@ -34,4 +34,3 @@ void string_decryption(FILE *pf1,char *strng,int size);
 /* decryption of secret message*/
 void secret_decryption(int size_txt,FILE *pf1, FILE *pf2);
 
-#endif
