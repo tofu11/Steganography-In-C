@@ -16,8 +16,6 @@ DEBUG = -coverage
 OBJECTS = Encode.o Decode.o Steganography.o tests.o
 
 
-Stegano: Encode.o Decode.o Steganography.o
-	$(CC) $(CFLAGS) -o Stegano Encode.o Decode.o Steganography.o
 
 Encode.o: Encode.c Stegano_header.h
 	$(CC) $(CFLAGS) Encode.c
@@ -27,6 +25,9 @@ Decode.o: Decode.c Stegano_header.h
 
 Steganography.o: Steganography.c Stegano_header.h
 	$(CC) $(CFLAGS) Steganography.c
+
+Stegano: Encode.o Decode.o Steganography.o
+	$(CC) $(CFLAGS) -o Stegano Encode.o Decode.o Steganography.o
 
 tests.o: tests.c Stegano_header.h
 	$(CC) -c $(CFLAGS) -I $(INCLUDE_PATH) tests.c
