@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stddef.h> 
+#include "Steganography.h"
 
 int size_of_image(FILE *fp1)
 {
