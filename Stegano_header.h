@@ -3,9 +3,12 @@
 #include <string.h>
 #include <stdlib.h>
 
+<<<<<<< HEAD
 
 int Encoding(char *argv_2, char *argv_3, char *argv_4);
 int Decode(char *argv_2, char *argv_4);
+=======
+>>>>>>> 3078d70aa3cb08d2a27f4171a65d1b0c7edaafb5
 
 //reading size of image file
 int size_of_image(FILE *fp1);
