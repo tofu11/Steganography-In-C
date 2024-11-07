@@ -37,13 +37,13 @@ int secret_text_size(FILE *fp2)
 //bits of text file
 int get_bit(char byte, int bit)
 {
-	return ((byte >> 8 - bit) & 1);
+	return ((byte >> (8 - bit)) & 1);
 }
 
 //encription of message
 void stega_encrypt(FILE *fp1, FILE *fp2, FILE *fp3)
 {
-	char file_buff = 0, msg_buff = 0, ch;	//temp var for one byte from file and msg
+	char file_buff = 0, msg_buff = 0;	//temp var for one byte from file and msg
 	int i;
 	int bit_msg;
 	while((msg_buff = fgetc(fp2)) != EOF)
