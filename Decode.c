@@ -148,7 +148,6 @@ int Decode(char *argv_2, char *argv_4)
 
 	/* closeing files */
 	fclose(pf1);
-	fclose(pf2);
 	return 0;
 
 }
