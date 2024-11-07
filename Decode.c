@@ -100,7 +100,7 @@ int Decode(char *argv_2, char *argv_4)
 	}
 
 	//magic str
-	char magic_strn[20], magic_strn1[20], strng[20];
+	char magic_strn[20], magic_strn1[20];
 	int j;
 
 	size_decryption(pf1,&size);
@@ -148,5 +148,7 @@ int Decode(char *argv_2, char *argv_4)
 
 	/* closeing files */
 	fclose(pf1);
+	fclose(pf2);
+	return 0;
 
 }
