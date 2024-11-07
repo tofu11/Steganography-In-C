@@ -15,6 +15,10 @@ CFLAGS = -ggdb -O0 -c -Wall -fprofile-arcs -ftest-coverage
 DEBUG = -coverage
 OBJECTS = Encode.o Decode.o Steganography.o tests.o
 
+# This will create Stegano instead of runner
+Stegano: Encode.o Decode.o Steganography.o
+	$(CC) $(CFLAGS) -o Stegano Encode.o Decode.o Steganography.o
+
 Encode.o: Encode.c Stegano_header.h
 	$(CC) $(CFLAGS) Encode.c
 
@@ -24,9 +28,6 @@ Decode.o: Decode.c Stegano_header.h
 Steganography.o: Steganography.c Stegano_header.h
 	$(CC) $(CFLAGS) Steganography.c
 
-runner: Encode.o Decode.o Steganography.o
-	$(CC) $(CFLAGS) -o runner Encode.o Decode.o Steganography.o
-
 tests.o: tests.c Stegano_header.h
 	$(CC) -c $(CFLAGS) -I $(INCLUDE_PATH) tests.c
 
@@ -35,4 +36,4 @@ tests: Encode.o Decode.o Steganography.o tests.o
 
 .PHONY: clean
 clean:
-	rm -rf *~ *.o code tests runner *.dSYM *.gc??
+	rm -rf *~ *.o code tests Stegano *.dSYM *.gc??  # also remove Stegano here
