@@ -124,7 +124,7 @@ void size_encrypt(int num,FILE *fp1, FILE *fp3)
 {
 
 	char file_buff;	
-	int i, j = 0;
+	int i;
 	int bit_msg;
 
 	for(i = 1; i <= 8; i++)
