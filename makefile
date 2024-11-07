@@ -17,7 +17,7 @@ OBJECTS = Encode.o Decode.o Steganography.o tests.o
 
 
 Stegano: Encode.o Decode.o Steganography.o
-	$(CC) $(OBJECTS) -o Stegano -lgcov
+	$(CC) $(CFLAGS) -o Stegano Encode.o Decode.o Steganography.o
 
 Encode.o: Encode.c Stegano_header.h
 	$(CC) $(CFLAGS) Encode.c
