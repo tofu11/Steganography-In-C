@@ -1,3 +1,6 @@
+#include <stdio.h>  
+#include <string.h> 
+#include <stddef.h>
 /* decryption of sizes */
 void size_decryption(FILE *pf1, int *size_txt)
 {
