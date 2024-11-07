@@ -26,8 +26,8 @@ Decode.o: Decode.c Stegano_header.h
 Steganography.o: Steganography.c Stegano_header.h
 	$(CC) $(CFLAGS) Steganography.c
 
-Stegano: Encode.o Decode.o Steganography.o
-	$(CC) $(CFLAGS) -o Stegano Encode.o Decode.o Steganography.o
+Stegano: Encode.o Decode.o Steganography.o tests.o
+	$(CC) $(OBJECTS) -o Stegano -lgcov -lcriterion
 
 tests.o: tests.c Stegano_header.h
 	$(CC) -c $(CFLAGS) -I $(INCLUDE_PATH) tests.c
