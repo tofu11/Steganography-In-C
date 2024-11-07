@@ -15,9 +15,9 @@ CFLAGS = -ggdb -O0 -c -Wall -fprofile-arcs -ftest-coverage
 DEBUG = -coverage
 OBJECTS = Encode.o Decode.o Steganography.o tests.o
 
-# Separate compilation and linking steps
+
 Stegano: Encode.o Decode.o Steganography.o
-	$(CC) $(OBJECTS) -o Stegano
+	$(CC) $(OBJECTS) -o Stegano -lgcov
 
 Encode.o: Encode.c Stegano_header.h
 	$(CC) $(CFLAGS) Encode.c
