@@ -1,6 +1,8 @@
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
 
 int Encoding(char *argv_2, char *argv_3, char *argv_4);
 int Decode(char *argv_2, char *argv_4);
