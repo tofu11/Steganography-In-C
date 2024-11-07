@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "Encode.c"
-#include "Decode.c"
+
 
 
 //reading size of image file
@@ -35,3 +34,4 @@ void string_decryption(FILE *pf1,char *strng,int size);
 /* decryption of secret message*/
 void secret_decryption(int size_txt,FILE *pf1, FILE *pf2);
 
+#endif
