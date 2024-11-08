@@ -1,0 +1,81 @@
+
+To tackle the manual bug that I added where the command ./Stegano -E -i linux.bmp -s secret.txt -o output_image.bmp is not returning the intended prompt, but rather jumping to the error message, I took the steps to debug as follows:
+
+gcc -g Steganography.c -o Stegano -> to create the executable that I will then run gdb on
+
+To verify this is a bug, I will run the command ./Stegano -E -i linux.bmp -s secret.txt -o output_image.bmp. The output is 
+
+*** !! Error !! ERROR !! Error !!***
+
+*** EXECUTION ==>
+*** ENCODING *** ==> ./Stegano -E -text|-image -i <input.bmp> -s <secret.txt|secret.bmp> -o <output.bmp>
+
+*** DECODING *** ==> ./Stegano -D -text|-image -i <encoded.bmp> -o <decoded.txt|decoded.bmp>
+
+FOR MORE DETAILS ===> **README**
+
+but it ** should ** return as
+
+Dimensions of the Image is 327 x 360 
+Total 44145 Charecters can be stored in linux.bmp.
+Enter your secret text and press Enter to finish:
+
+This means there is an issue, specifically with how the inline command is being parsed as it is hitting the default case instead of an intended case to handle encoding text!
+
+Let’s run 'gdb ./Stegano' and put a break at main in Steganography.c.
+
+Then when the break point was successfully put, let’s run the command 'run -E -i linux.bmp -s secret.txt -o output_image.bmp'. This is the same thing as us doing ./Stegano -E -i linux.bmp -s secret.txt -o output_image.bmp, except now we are running this inside of the debugger to see why it is not giving us as intended.
+
+Now, we hit our breakpoint and this shows us the next line that will be executed 
+
+Breakpoint 1, main (argc=8, argv=0x7fffffffe938) at Steganography.c:7
+7	    int is_image = 0; // 0 for text (default), 1 for image
+
+Let’s run this, and see where this in line command hits in the switch case within main
+
+Breakpoint 1, main (argc=8, argv=0x7fffffffe938) at Steganography.c:7
+7	    int is_image = 0; // 0 for text (default), 1 for image
+(gdb) n
+9	    switch (argc)
+(gdb) n
+71	            printf("\t*** !! Error !! ERROR !! Error !!***\n\n");
+(gdb)
+
+As we can see, the switch case goes straight to the default case. This means, argc was not caught by 9 or 7. This means, we are not handling the current argc that is 8. This lets us know that we will need to add a case for 8, where it handles text encoding by default if the inline command omits specifying if an encoding is an -image or -text.
+
+Let’s uncomment the case 8 switch that we commented out to verify that is what was wrong.
+
+Now that we uncommented case 8, we can see this output changed when running that inline command
+
+cerf {~/CSE306/exp02-team04-lzjt/Steganography-In-C} > ./Stegano -E -i linux.bmp -s secret.txt -o output_image.bmp
+Dimensions of the Image is 327 x 360 
+Total 44145 Charecters can be stored in linux.bmp.
+Enter your secret text and press Enter to finish:
+
+Now to verify where this is going, lets run gdb on this command again. Let’s remake the executable Stagno
+
+gcc Steganography.c -o Stegano
+
+Now we see that instead of jumping to the printf error, we see this new path its taking
+
+Breakpoint 1, main (argc=8, argv=0x7fffffffe938) at Steganography.c:7
+7	    int is_image = 0; // 0 for text (default), 1 for image
+(gdb) n
+9	    switch (argc)
+(gdb) n
+34	            if (!strcmp(argv[1], "-E"))
+(gdb) l
+29	                else
+30	                    Encoding(argv_2, argv_3, argv_4);
+31	                break;
+32	            }
+33	        case 8: 
+34	            if (!strcmp(argv[1], "-E"))
+35	            {
+36	                for (i = 2; i < 8; i++)
+37	                {
+38	                    if (!strcmp(argv[i], "-i"))
+(gdb)
+
+When running 'l' we see that it hit case 8 previous to the line 34 it shows on gdb. That means we are successfully handling the previously-buggy code for ./Stegano -E -i linux.bmp -s secret.txt -o output_image.bmp
+
