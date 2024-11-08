@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
                     Encoding(argv_2, argv_3, argv_4);
                 break;
             }
- /*       case 8: 
+        case 8: 
             if (!strcmp(argv[1], "-E"))
             {
                 for (i = 2; i < 8; i++)
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
                 Encoding(argv_2, argv_3, argv_4); 
                 break;
             }
-*/
+
         case 7: 
             if (!strcmp(argv[1], "-D"))
             {
