@@ -1,4 +1,23 @@
 /* decryption of sizes */
+
+
+int get_encoding_bytes(const char *encoding) {
+    if (strcmp(encoding, "-US-ASCII") == 0) {
+        return 1;
+    } else if (strcmp(encoding, "-UTF-8") == 0) {
+        return 1; 
+    } else if (strcmp(encoding, "-UTF-16") == 0) {
+        return 2;
+    } else {
+        printf("Unsupported encoding type: %s\n", encoding);
+        exit(1);
+    }
+}
+
+
+
+
+
 void size_decryption(FILE *pf1, int *size_txt)
 {
 	int file_buff = 0, i;
@@ -20,11 +39,12 @@ void size_decryption(FILE *pf1, int *size_txt)
 }
 
 /* decryption of strings*/
-void string_decryption(FILE *pf1,char *strng,int size)
+void string_decryption(FILE *pf1,char *strng,int size, int bytes)
 {
 	int file_buff=0, i, j=0, k=0;
 	int ch, bit_msg;
-	for (i = 0; i < (size * 8); i++)
+        int total_bits = size * 8 * bytes;
+	for (i = 0; i < total_bits; i++)
 	{
 		j++;
 		ch = fgetc(pf1);
@@ -38,11 +58,13 @@ void string_decryption(FILE *pf1,char *strng,int size)
 			file_buff = file_buff << 1;
 		}
 
-		if ( j == 8)
+		if ( j == 8 * bytes)
 		{
-			strng[k] =(char)file_buff; 
+                    for (int b = bytes_per_char - 1; b >= 0; b--) {
+                        strng[k + b] = (file_buff >> (8 * b)) & 0xFF;
+                    } 
 			j=0;
-			k++;
+			k+=bytes;
 			file_buff = 0;
 		}
 	}
@@ -78,11 +100,13 @@ void secret_decryption(int size_txt, FILE *pf1, FILE *pf2)
 	}
 	printf("\n*** Secret Text Is ==> %s\n\n", output);
 }
-int Decode(char *argv_2, char *argv_4)
+int Decode(char *argv_2, char *argv_4, char *encoding)
 {
 	FILE *pf1, *pf2;
 	
 	int size, size1, size_txt;
+
+        int bytes_per_char = get_encoding_bytes(encoding);
 
 	//opening Image File
 	if((pf1 = fopen(argv_2, "r")) == NULL) 
@@ -104,7 +128,7 @@ int Decode(char *argv_2, char *argv_4)
 	int j;
 
 	size_decryption(pf1,&size);
-	string_decryption(pf1,magic_strn,size);
+	string_decryption(pf1,magic_strn,size,1);
 
 	printf("\nEnter the  magic string : \t");
 	for(j = 0;(magic_strn1[j] = getchar()) != '\n'; j++);
@@ -125,7 +149,7 @@ int Decode(char *argv_2, char *argv_4)
 	char passwd[20], passwd_str[20];
 
 	size_decryption(pf1,&size1);
-	string_decryption(pf1,passwd_str,size1);
+	string_decryption(pf1,passwd_str,size1,bytes_per_char);
 
 	printf("Enter The Password : \t");
 	scanf("%s", passwd);
