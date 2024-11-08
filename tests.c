@@ -29,7 +29,7 @@ Test(type_tests, test01) {
     char *text = "Compilers are cool!";
     char *expected = "Compilers are cool!";
     
-    checkType(image, text, expected, "US-ASCII");
+    checkType(image, text, expected, "-US-ASCII");
 }
 
 // UTF-8
@@ -38,7 +38,7 @@ Test(type_tests, test02) {
     char *text = "Compilers are cool!";
     char *expected = "Compilers are cool!";
     
-    checkType(image, text, expected, "UTF-8");
+    checkType(image, text, expected, "-UTF-8");
 }
 
 // UTF-16
@@ -47,5 +47,34 @@ Test(type_tests, test03) {
     char *text = "Compilers are cool!";
     char *expected = "Compilers are cool!";
     
-    checkType(image, text, expected, "UTF-16");
+    checkType(image, text, expected, "-UTF-16");
+}
+
+// invalid type
+Test(type_tests, test04) {
+    char *image = "linux.bmp";
+    char *text = "Compilers are cool!";
+    char *expected = "Compilers are cool!";
+    
+    cr_assert_eq(Encoding(image, text, "output1.bmp", "INVALID_ENCODING"), 1, 
+                 "Expected Encoding to fail for invalid encoding type");
+    cr_assert_eq(Decode("output1.bmp", "txt1.txt", "INVALID_ENCODING"), 1, 
+                 "Expected Decoding to fail for invalid encoding type");
+}
+
+// empty 
+Test(type_tests, test05) {
+    char *image = "linux.bmp";
+    char *text = "";
+    char *expected = "";
+    
+    checkType(image, text, expected, "-UTF-8");
+}
+
+Test(steganography_tests, test06) {
+    char *image = "linux.bmp";
+    char *text = "";
+    char *expected = "";
+    
+    checkType(image, text, expected, "-US-ASCII");
 }
