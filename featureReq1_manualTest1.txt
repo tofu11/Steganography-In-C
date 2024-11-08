@@ -1,0 +1,66 @@
+
+First, let’s hand-test that text to image decryption works.
+
+I will run these commands
+
+** Compile the executable: gcc Steganography.c -o Stegano
+
+** Encode text into linux.bmp: ./Stegano -E -i linux.bmp -s secret.txt -o output_image.bmp
+ 
+When running this, I am outputted this by the program
+
+Dimensions of the Image is 327 x 360 
+Total 44145 Charecters can be stored in linux.bmp.
+Enter your secret text and press Enter to finish:
+**123**
+
+Size of The Secret Message is ==> 3
+
+*** Sucessfully copied 54 header bytes ***
+
+Enter The Magic String '#' '$' Only : 	**#$#**
+Size Of The Magic string is ==> 3
+*** Magic String Encrypted ***
+
+Enter the password : 	**1001**
+Size Of The Password is ==> 4
+*** Password Encrypted ***
+
+*** Secret Message Encrypted Successfully ***
+
+Everything surrounded in a pair of ** is what I have inputted myself. Now, we can assume for this hand test that output_image.bmp contains linux.bmp along with our secret text '123' inside. Now, let’s decode this.
+
+./Stegano -D -i output_image.bmp -o text_output.txt
+
+This unfortunately gives us an error as below
+
+*** !! Error !! ERROR !! Error !!***
+
+*** EXECUTION ==> 
+		*** ENCODING *** ==> 	./Stegano -E -text|-image -i <input.bmp> -s <secret.txt|secret.bmp> -o <output.bmp>
+
+		*** DECODING *** ==> 	./Stegano -D -text|-image -i <encoded.bmp> -o <decoded.txt|decoded.bmp>
+
+		FOR MORE DETAILS ===> **README**
+
+We can use gdb to find out that our current Steganography.c is not handling decoding without the -image/-text flag similar to the bug that we initiated ourselves in featureRequest1_bugfix.txt. Let’s add this case handling and resolve it.
+
+Now that we resolved it, we can rerun the decoding. Our expected output is '123'
+
+Enter the  magic string : 	**#$#**
+
+	*** Magic String Accepted ***
+
+Enter The Password : 	**1001**
+
+	*** Password Accepted ***
+
+*** Secret Text Is ==> 123
+
+*** The Secret Text Is Copied To ==> decoded_secret.txt
+
+The secret text was successfully returned back to us, let’s also make sure decoded_secret.txt is correct
+
+decoded_secret.txt in fact did have '123' inside of it.
+
+Therefore, we have shown manually that encode and decode a secret text to image works!
