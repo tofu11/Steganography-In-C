@@ -16,6 +16,9 @@ int secret_text_size(FILE *fp2);
 //bits of text file
 int get_bit(char byte, int bit);
 
+//Encoding the bytes
+int get_encoding_bytes(const char *encoding);
+
 //encription of message
 void stega_encrypt(FILE *fp1, FILE *fp2, FILE *fp3);
 
@@ -29,7 +32,7 @@ void size_encrypt(int num,FILE *fp1, FILE *fp3);
 void size_decryption(FILE *pf1, int *size_txt);
 
 /* decryption of strings*/
-void string_decryption(FILE *pf1,char *strng,int size);
+void string_decryption(FILE *pf1,char *strng,int size, int bytes);
 
 /* decryption of secret message*/
 void secret_decryption(int size_txt,FILE *pf1, FILE *pf2);
