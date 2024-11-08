@@ -66,6 +66,28 @@ int main(int argc, char *argv[])
                     Decode(argv_2, argv_4);
                 break;
             }
+	case 6: 
+            if (!strcmp(argv[1], "-D"))
+            {
+                for (i = 2; i < 6; i++)
+                {
+                    if (!strcmp(argv[i], "-i"))
+                        argv_2 = argv[i + 1];
+                    else if (!strcmp(argv[i], "-o"))
+                        argv_4 = argv[i + 1];
+                    else if (!strcmp(argv[i], "-image"))
+                        is_image = 1;
+                    else if (!strcmp(argv[i], "-text"))
+                        is_image = 0;
+                }
+                
+                // Default to text decoding if not specified
+                if (is_image)
+                    DecodeImage(argv_2, argv_4); 
+                else
+                    Decode(argv_2, argv_4);
+                break;
+            }
 
         default:
             printf("\t*** !! Error !! ERROR !! Error !!***\n\n");

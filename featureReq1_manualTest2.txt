@@ -1,0 +1,24 @@
+
+First, let’s hand-test that text to image decryption works.
+
+I will run these commands
+
+** Compile the executable: gcc Steganography.c -o Stegano
+
+** Encode linux.bmp with linux.bmp: ./Stegano -E -image -i linux.bmp -s linux.bmp -o encoded_linux.bmp
+ 
+When running this, nothing is outputted which represents a successful encoding. After executing that line above, a new .bmp file will form named encoded_linux.bmp which is our encoded image that we will be passing into decoding.
+
+Now, we will call our decoding function ./Stegano -D -image -i encoded_linux.bmp -o decoded_linux.bmp
+
+With that command, we are decoding the image from encoded_linux.bmp into a new .bmp that will be made named decoded_linux.bmp. Theoretically, decoded_linux.bmp should be equal to linux.bmp, but we can manually check this.
+
+We can run cmp linux.bmp decoded_linux.bmp to compare the hex bytes. 
+
+However, the feedback is as given 
+
+** cmp: EOF on decoded_linux.bmp after byte 14888, in line 77.
+
+Since this was given at the end of file, that means that all bytes currently stored in decoded_linux.bmp that ended up being written was equivalent to linux.bmp, meaning we were able to correctly decode the original image from the encoded image from what we have so far, but are missing the rest of the image.
+
+My next steps with this is to reevaluate what is currently failing inside of my featureReq1_test.c, run gcov -abcfu and assess the feedback, ensuring that I cover all possible branches to fully test my code so it works as intended.
