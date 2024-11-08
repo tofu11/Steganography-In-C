@@ -150,3 +150,40 @@ int Decode(char *argv_2, char *argv_4)
 	fclose(pf1);
 
 }
+
+int DecodeImage(char *inputImage, char *outputImage) {
+    FILE *input_image, *output_image;
+
+    if ((input_image = fopen(inputImage, "rb")) == NULL) {
+        printf("Could not open input image file %s.\n", inputImage);
+        return 1;
+    }
+    if ((output_image = fopen(outputImage, "wb")) == NULL) {
+        printf("Could not create output image file %s.\n", outputImage);
+        fclose(input_image);
+        return 1;
+    }
+
+    fseek(input_image, 54, SEEK_SET);
+
+    int ch;
+    while (!feof(input_image)) {
+        ch = 0;
+        for (int bit = 0; bit < 8; bit++) {
+            int image_byte = fgetc(input_image);
+            if (image_byte == EOF) {
+                fclose(input_image);
+                fclose(output_image);
+                return 0;
+            }
+            int bit_value = image_byte & 1;
+            ch = (ch << 1) | bit_value;
+        }
+        fputc(ch, output_image);
+    }
+
+    fclose(input_image);
+    fclose(output_image);
+    return 0;
+}
+
