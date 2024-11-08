@@ -265,3 +265,49 @@ int Encoding(char *argv_2,char *argv_3,char *argv_4)
 	return 0;
 
 }
+
+int EncodingImage(char *inputImage, char *secretImage, char *resultingImage) {
+    FILE *input_image, *secret_image, *output_image;
+
+    if ((input_image = fopen(inputImage, "rb")) == NULL) {
+        printf("Could not open input image file %s.\n", inputImage);
+        return 1;
+    }
+    if ((secret_image = fopen(secretImage, "rb")) == NULL) {
+        printf("Could not open secret image file %s.\n", secretImage);
+        fclose(input_image);
+        return 1;
+    }
+    if ((output_image = fopen(resultingImage, "wb")) == NULL) {
+        printf("Could not create output file %s.\n", resultingImage);
+        fclose(input_image);
+        fclose(secret_image);
+        return 1;
+    }
+
+    // Copy header
+    for (int i = 0; i < 54; i++) {
+        fputc(fgetc(input_image), output_image);
+    }
+
+    int ch;
+    while ((ch = fgetc(secret_image)) != EOF) {
+        for (int i = 0; i < 8; i++) {
+            int byte = fgetc(input_image);
+            if (byte == EOF) break;
+            int i_val = (ch >> (7 - i)) & 1;
+            byte = (byte & ~1) | i_val;
+            fputc(byte, output_image);
+        }
+    }
+
+    // Copy the rest of the image
+    while ((ch = fgetc(input_image)) != EOF) {
+        fputc(ch, output_image);
+    }
+
+    fclose(input_image);
+    fclose(secret_image);
+    fclose(output_image);
+    return 0;
+}
