@@ -6,6 +6,10 @@ int size_of_image(FILE *fp1)
 	fseek(fp1, 0x12, SEEK_SET);	//Seek to the Width position
 	fread(&width, sizeof(int), 1, fp1);	//Reading Width
 	fread(&height, sizeof(int), 1, fp1);	//Read height
+	
+	width=abs(width);
+	height=abs(height);
+
 	printf("Dimensions of the Image is %d x %d \n", width, height);
 	fseek(fp1, 0L, SEEK_SET);	//Seek to the start position
 
