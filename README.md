@@ -29,7 +29,6 @@ Decode.c - Decoding Function
 // text_output.txt Is To Store The Secret Text Present In Image.
 
 # INDEX
-
 	-E = ENCODING
 	-D = DECODING
 	-i = Input Source BMP Image / Output Image
