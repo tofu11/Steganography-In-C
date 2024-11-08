@@ -34,3 +34,10 @@ void string_decryption(FILE *pf1,char *strng,int size);
 /* decryption of secret message*/
 void secret_decryption(int size_txt,FILE *pf1, FILE *pf2);
 
+/* encoding image into other image */
+int EncodingImage(char *input_image_file, char *secret_image_file, char *output_image_file);
+
+/* decode image out of another image */
+int DecodeImage(char *input_image_file, char *output_image_file);
+
+
