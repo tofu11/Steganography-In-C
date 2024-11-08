@@ -1,25 +1,32 @@
+
+
+#include <opencv2/opencv.hpp>
+
+using namespace cv;
+
+
 //reading size of image file
-int size_of_image(FILE *fp1)
+int size_of_image(const char *fp1)
 {
+    const char *filetype = strrchr(fp1,:'.');
     unsigned int width, height;
-
-    fseek(fp1, 0x12, SEEK_SET); // Seek to the Width position
-    fread(&width, sizeof(unsigned int), 1, fp1); // Read Width
-    fread(&height, sizeof(unsigned int), 1, fp1); // Read Height
-
-    width = abs(width);
-    height = abs(height);  
-
+    if (strcmp(ext, ".bmp") == 0 || strcmp(ext, ".jpg") == 0 ||
+        strcmp(ext, ".jpeg") == 0 || strcmp(ext, ".png") == 0 ||
+        strcmp(ext, ".tiff") == 0 || strcmp(ext, ".gif") == 0){
+	    Mat image = imread(fp1,IMREAD_COLOR);
+	    if (image.empty()) {
+            printf("Could not open or find the image %s.\n", filename);
+            return -1;
+        }
+	width=image.cols;
+        height=image.rows;
     printf("Dimensions of the Image is %d x %d \n", width, height);
-    fseek(fp1, 0L, SEEK_SET); 
     int total_pixels = width * height;
     int total_bits = total_pixels * 3;
     int capacity = total_bits / 8;
     printf("Total Pixels: %d\n", total_pixels);
     printf("Total Bits: %d\n", total_bits);
     printf("Calculated Capacity (characters): %d\n", capacity);
-
-    fseek(fp1, 0L, SEEK_SET);
 
 
     return capacity;
