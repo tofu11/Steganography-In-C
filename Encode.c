@@ -1,19 +1,29 @@
 //reading size of image file
 int size_of_image(FILE *fp1)
 {
-	int width, height;
+    unsigned int width, height;
 
-	fseek(fp1, 0x12, SEEK_SET);	//Seek to the Width position
-	fread(&width, sizeof(int), 1, fp1);	//Reading Width
-	fread(&height, sizeof(int), 1, fp1);	//Read height
-	
-	width=abs(width);
-	height=abs(height);
+    fseek(fp1, 0x12, SEEK_SET); // Seek to the Width position
+    fread(&width, sizeof(unsigned int), 1, fp1); // Read Width
+    fread(&height, sizeof(unsigned int), 1, fp1); // Read Height
 
-	printf("Dimensions of the Image is %d x %d \n", width, height);
-	fseek(fp1, 0L, SEEK_SET);	//Seek to the start position
+    width = abs(width);
+    height = abs(height);  
 
-	return ((width * height * 3) / 8);
+    printf("Dimensions of the Image is %d x %d \n", width, height);
+    fseek(fp1, 0L, SEEK_SET); 
+    int total_pixels = width * height;
+    int total_bits = total_pixels * 3;
+    int capacity = total_bits / 8;
+    printf("Total Pixels: %d\n", total_pixels);
+    printf("Total Bits: %d\n", total_bits);
+    printf("Calculated Capacity (characters): %d\n", capacity);
+
+    fseek(fp1, 0L, SEEK_SET);
+
+
+    return capacity;
+
 }
 //Entering Secret Message to file
 void secret_text(FILE *fp2)
